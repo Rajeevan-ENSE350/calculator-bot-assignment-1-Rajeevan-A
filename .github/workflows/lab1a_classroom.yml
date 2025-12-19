@@ -1,0 +1,43 @@
+
+#### `.github/workflows/classroom.yml`  (10 marks autograding)
+This uses the **command grader** and awards **10 points** if the compile+run command succeeds. :contentReference[oaicite:1]{index=1}
+```yaml
+name: Lab 1A Autograding
+
+on: [push]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  autograding:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout student code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: HelloWorld builds & runs (10 marks)
+        id: hello
+        uses: github-education-resources/autograding-command-grader@v1
+        with:
+          test-name: "HelloWorld builds & runs"
+          command: |
+            javac src/HelloWorld.java
+            java -cp src HelloWorld
+          timeout: "2"
+          max-score: "10"
+
+      - name: Autograding Reporter
+        uses: github-education-resources/autograding-grading-reporter@v1
+        env:
+          HELLO_RESULTS: "${{ steps.hello.outputs.result }}"
+        with:
+          runners: hello
