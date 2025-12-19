@@ -63,6 +63,7 @@ jobs:
 
     - name: Autograding Reporter
       if: always()
+      continue-on-error: true
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
         ADDITION_RESULTS: "${{steps.addition.outputs.result}}"
